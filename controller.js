@@ -44,12 +44,11 @@ function parseResult() {
 }
 
 function main() {
-     getResult('smartconnectdev.mckinsey.com', '', '')
+     getResult('facebook.com', '', '')
                 .then(function(success) {
-                    console.log(success.domains['smartconnectdev.mckinsey.com'].aasa)
-                    console.log(success.domains['smartconnectdev.mckinsey.com'].errors)
+                    console.log(success.domains['facebook.com'])
                 }).catch(function(err) {
-                    
+
                 })
 }
 
