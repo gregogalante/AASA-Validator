@@ -1,18 +1,21 @@
-var checkDomain = require('./validator')
-function getResult (domain, bundleIdentifier, teamIdentifier) {
-    var respObj = { domains: { } };
+var validator = require('./validator')
+var parser = require('./parser')
+
+
+function getResult(domain, bundleIdentifier, teamIdentifier) {
+    var respObj = { domains: {} };
 
     var cleanedDomain = domain.replace(/https?:\/\//, '');
     cleanedDomain = cleanedDomain.replace(/\/.*/, '');
 
     var fileUrl = 'https://' + cleanedDomain + '/apple-app-site-association';
-    return checkDomain(fileUrl, bundleIdentifier, teamIdentifier)
-        .then(function(results) {
+    return validator.validate(fileUrl, bundleIdentifier, teamIdentifier)
+        .then(function (results) {
             respObj.domains[domain] = results;
             return respObj;
         })
-        .catch(function(errorObj) {
-            
+        .catch(function (errorObj) {
+
             //check if AASA file exists in the root domain 
             var noFile = false;
             try {
@@ -22,34 +25,37 @@ function getResult (domain, bundleIdentifier, teamIdentifier) {
                 noFile = true;
             }
 
-            if(errorObj.serverError || errorObj.errorOutOfScope || errorObj.badDns || errorObj.httpsFailure || noFile){
-                    fileUrl = 'https://' + cleanedDomain + '/.well-known/apple-app-site-association';
-                    return checkDomain(fileUrl,bundleIdentifier,teamIdentifier)
-                        .then(function(results){
-                            respObj.domains[domain] = results;
-                            return respObj;
-                        }).catch(function(errorObj){
+            if (errorObj.serverError || errorObj.errorOutOfScope || errorObj.badDns || errorObj.httpsFailure || noFile) {
+                fileUrl = 'https://' + cleanedDomain + '/.well-known/apple-app-site-association';
+                return validator.validate(fileUrl, bundleIdentifier, teamIdentifier)
+                    .then(function (results) {
+                        respObj.domains[domain] = results;
+                        return respObj;
+                    }).catch(function (errorObj) {
 
-                            respObj.domains[domain] = { errors: errorObj };
-                            return respObj;
-                        })
+                        respObj.domains[domain] = { errors: errorObj };
+                        return respObj;
+                    })
             }
             respObj.domains[domain] = { errors: errorObj };
             return respObj;
         });
 }
 
-function parseResult() {
-
+function validateAASAFileFromDomain(domain, bundleIdentifier, teamIdentifier) {
+    return getResult(domain, bundleIdentifier, teamIdentifier)
+        .then(function (success) {
+            var parseResult = parser.parse(Object.keys(success.domains)[0], success);
+            return parseResult;
+        }).catch(function (err) {
+            return err;
+        })
 }
 
 function main() {
-     getResult('facebook.com', '', '')
-                .then(function(success) {
-                    console.log(success.domains['facebook.com'])
-                }).catch(function(err) {
-
-                })
+    validateAASAFileFromDomain('facebook.com', '', '')
+        .then(function (result) {
+            console.log(result);
+        })
 }
-
 main()

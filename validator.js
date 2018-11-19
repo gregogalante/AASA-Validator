@@ -99,7 +99,7 @@ function _evaluateAASA(content, bundleIdentifier, teamIdentifier, encrypted) {
     });
 }
 
-function _checkDomain(fileUrl, bundleIdentifier, teamIdentifier) {
+function _validate(fileUrl, bundleIdentifier, teamIdentifier) {
    
     return new B(function(resolve, reject) {
         var errorObj = { };
@@ -239,4 +239,4 @@ return new B(function(resolve,reject){
 }
 
 
-module.exports = _checkDomain;
+module.exports.validate = _validate;
