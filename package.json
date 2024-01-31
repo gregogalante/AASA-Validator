@@ -4,21 +4,26 @@
   "description": "This API can be used to perform all validations against apple-app-site-association file used in Universal Url.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sacOO7/AASA-Validator.git"
+    "url": "git+https://github.com/gregogalante/AASA-Validator.git"
   },
   "keywords": [
     "apple",
     "aasa",
     "validator-api"
   ],
-  "author": "Sachin Shinde",
+  "author": "Galante Gregorio",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sacOO7/AASA-Validator/issues"
+    "url": "https://github.com/gregogalante/AASA-Validator/issues"
   },
-  "homepage": "https://github.com/sacOO7/AASA-Validator#readme"
+  "homepage": "https://github.com/gregogalante/AASA-Validator#readme",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "superagent": "^8.1.2"
+  }
 }

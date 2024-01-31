@@ -53,7 +53,13 @@ function validateAASAFileFromDomain(domain, bundleIdentifier, teamIdentifier) {
 }
 
 function main() {
-    validateAASAFileFromDomain('facebook.com', '', '')
+    // take domain from command line argument (node index.js <domain>)
+    const domain = process.argv[2];
+    if (!domain) {
+        console.log('Please provide a domain name');
+        return;
+    }
+    validateAASAFileFromDomain(domain, '', '')
         .then(function (result) {
             console.log(result);
         })
